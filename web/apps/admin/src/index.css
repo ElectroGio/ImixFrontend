@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-imix-leaf-50: #f1faf3;
+  --color-imix-leaf-500: #2f9e44;
+  --color-imix-leaf-700: #1e7a35;
+  --color-imix-earth-500: #8a6d3b;
+  --color-imix-sun-500: #f6c453;
+}
+
+html, body, #root { height: 100%; }

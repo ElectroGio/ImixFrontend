@@ -1,0 +1,9 @@
+{
+  "name": "imix-web",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/*", "packages/*"],
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

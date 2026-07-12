@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Imix",
+    "slug": "imix",
+    "scheme": "imix",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.imix.app" },
+    "android": { "package": "com.imix.app" },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": { "typedRoutes": true },
+    "extra": {
+      "apiBaseUrl": "http://10.0.2.2:5080/api"
+    }
+  }
+}
