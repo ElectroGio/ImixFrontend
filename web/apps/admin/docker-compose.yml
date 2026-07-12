@@ -1,0 +1,34 @@
+name: imix-admin
+
+# Deployment stack for the Admin SPA (Vite + React) served by Nginx.
+# Build context must be the pnpm workspace root (frontend/web) so the
+# lockfile and workspace manifest are available.
+
+services:
+  admin:
+    build:
+      context: ../..                       # frontend/web (pnpm workspace root)
+      dockerfile: apps/admin/Dockerfile
+    image: imix-admin:latest
+    restart: unless-stopped
+    environment:
+      # URL nginx uses to reach the backend API. Options:
+      #   - http://api:8080  (when this service shares a network with the backend stack)
+      #   - https://api.example.com  (public backend URL)
+      API_UPSTREAM: ${API_UPSTREAM:-https://api.example.com}
+    ports:
+      - "${ADMIN_PORT:-8081}:80"
+    # Uncomment to attach to the backend network for internal API_UPSTREAM.
+    # networks:
+    #   - imix-backend
+    # Uncomment when using Dokploy's built-in Traefik:
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.imix-admin.rule=Host(`admin.example.com`)"
+    #   - "traefik.http.routers.imix-admin.entrypoints=websecure"
+    #   - "traefik.http.routers.imix-admin.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.imix-admin.loadbalancer.server.port=80"
+
+# networks:
+#   imix-backend:
+#     external: true

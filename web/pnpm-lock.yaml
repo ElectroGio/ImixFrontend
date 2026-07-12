@@ -65,12 +65,24 @@ importers:
 
   apps/landing:
     dependencies:
+      '@tanstack/react-query':
+        specifier: ^5.100.14
+        version: 5.100.14(react@19.2.6)
+      axios:
+        specifier: ^1.16.1
+        version: 1.16.1
       react:
         specifier: ^19.0.0
         version: 19.2.6
       react-dom:
         specifier: ^19.0.0
         version: 19.2.6(react@19.2.6)
+      react-router-dom:
+        specifier: ^7.16.0
+        version: 7.16.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      zustand:
+        specifier: ^5.0.14
+        version: 5.0.14(@types/react@19.2.15)(react@19.2.6)
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.0.0

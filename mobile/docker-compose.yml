@@ -1,0 +1,39 @@
+name: imix-mobile
+
+# Deployment stack for the Expo mobile app compiled to the web target and
+# served by Nginx. Use this only if you want a browser-accessible version of
+# the mobile UI; native builds (iOS/Android) should go through EAS Build.
+
+services:
+  mobile:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Baked into the web bundle at build time. Since api.ts reads it from
+        # Constants.expoConfig.extra.apiBaseUrl, expose it via app.config.js
+        # (see README) or point axios directly at EXPO_PUBLIC_API_BASE_URL.
+        EXPO_PUBLIC_API_BASE_URL: ${EXPO_PUBLIC_API_BASE_URL:-/api}
+    image: imix-mobile-web:latest
+    restart: unless-stopped
+    environment:
+      # URL nginx uses to reach the backend API. Options:
+      #   - http://api:8080  (attach this service to the backend network)
+      #   - https://api.example.com  (public backend URL)
+      API_UPSTREAM: ${API_UPSTREAM:-https://api.example.com}
+    ports:
+      - "${MOBILE_PORT:-8083}:80"
+    # Uncomment to share the backend network:
+    # networks:
+    #   - imix-backend
+    # Uncomment when using Dokploy's built-in Traefik:
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.imix-mobile.rule=Host(`app.example.com`)"
+    #   - "traefik.http.routers.imix-mobile.entrypoints=websecure"
+    #   - "traefik.http.routers.imix-mobile.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.imix-mobile.loadbalancer.server.port=80"
+
+# networks:
+#   imix-backend:
+#     external: true
