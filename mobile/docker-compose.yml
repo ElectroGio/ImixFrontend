@@ -17,15 +17,14 @@ services:
     image: imix-mobile-web:latest
     restart: unless-stopped
     environment:
-      # URL nginx uses to reach the backend API. Options:
-      #   - http://api:8080  (attach this service to the backend network)
-      #   - https://api.example.com  (public backend URL)
-      API_UPSTREAM: ${API_UPSTREAM:-https://api.example.com}
+      # URL nginx uses to reach the backend API.
+      # Inside dokploy-network the backend compose service `api` is reachable
+      # by its service name.
+      API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
     ports:
       - "${MOBILE_PORT:-8083}:80"
-    # Uncomment to share the backend network:
-    # networks:
-    #   - imix-backend
+    networks:
+      - dokploy-network
     # Uncomment when using Dokploy's built-in Traefik:
     # labels:
     #   - "traefik.enable=true"
@@ -34,6 +33,6 @@ services:
     #   - "traefik.http.routers.imix-mobile.tls.certresolver=letsencrypt"
     #   - "traefik.http.services.imix-mobile.loadbalancer.server.port=80"
 
-# networks:
-#   imix-backend:
-#     external: true
+networks:
+  dokploy-network:
+    external: true

@@ -12,15 +12,14 @@ services:
     image: imix-landing:latest
     restart: unless-stopped
     environment:
-      # URL nginx uses to reach the backend API. Options:
-      #   - http://api:8080  (when this service shares a network with the backend stack)
-      #   - https://api.example.com  (public backend URL)
-      API_UPSTREAM: ${API_UPSTREAM:-https://api.example.com}
+      # URL nginx uses to reach the backend API.
+      # Inside dokploy-network the backend compose service `api` is reachable
+      # by its service name. Override in Dokploy if the service was renamed.
+      API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
     ports:
       - "${LANDING_PORT:-8082}:80"
-    # Uncomment to attach to the backend network for internal API_UPSTREAM.
-    # networks:
-    #   - imix-backend
+    networks:
+      - dokploy-network
     # Uncomment when using Dokploy's built-in Traefik:
     # labels:
     #   - "traefik.enable=true"
@@ -29,6 +28,6 @@ services:
     #   - "traefik.http.routers.imix-landing.tls.certresolver=letsencrypt"
     #   - "traefik.http.services.imix-landing.loadbalancer.server.port=80"
 
-# networks:
-#   imix-backend:
-#     external: true
+networks:
+  dokploy-network:
+    external: true
