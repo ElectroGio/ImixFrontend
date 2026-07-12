@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
+import { useRealtimeNotifications } from "../lib/realtime";
 
 const links = [
   { to: "/", label: "Dashboard" },
@@ -11,6 +12,7 @@ const links = [
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {
+  useRealtimeNotifications();
   const logout = useAuthStore((s) => s.logout);
   const user = useAuthStore((s) => s.user);
   return (
