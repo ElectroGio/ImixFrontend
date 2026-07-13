@@ -16,8 +16,11 @@ services:
       # Inside dokploy-network the backend compose service `api` is reachable
       # by its service name. Override in Dokploy if the service was renamed.
       API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
-    ports:
-      - "${LANDING_PORT:-8082}:80"
+    # No `ports:` mapping — Dokploy's Traefik reaches Nginx on port 80
+    # through the shared dokploy-network. Configure the domain in the
+    # Dokploy panel with Container Port = 80.
+    expose:
+      - "80"
     networks:
       - dokploy-network
     # Uncomment when using Dokploy's built-in Traefik:

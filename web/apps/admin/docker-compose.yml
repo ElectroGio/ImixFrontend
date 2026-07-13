@@ -17,8 +17,11 @@ services:
       # by its service name. If Dokploy renames it with a suffix, override
       # API_UPSTREAM in the panel (e.g. http://api-<suffix>:8080).
       API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
-    ports:
-      - "${ADMIN_PORT:-8081}:80"
+    # No `ports:` mapping — Dokploy's Traefik reaches Nginx on port 80
+    # through the shared dokploy-network. Configure the domain in the
+    # Dokploy panel with Container Port = 80.
+    expose:
+      - "80"
     networks:
       - dokploy-network
     # Uncomment when using Dokploy's built-in Traefik:
