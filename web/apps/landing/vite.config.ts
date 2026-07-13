@@ -5,15 +5,9 @@ import tailwind from "@tailwindcss/vite";
 export default defineConfig({
     plugins: [react(), tailwind()],
     server: {
-		port: 3000,
-		host: '0.0.0.0',
-		allowedHosts: true,
-		watch: {
-		  ignored: ['**/.git/**', '**/node_modules/**', '**/dist/**'],
-		},
-		// Barrera adicional: niega archivos .git del escaneo de Vite
-		fs: {
-		  deny: ['.git'],
-		},
-  }
+        port: 5174,
+        proxy: {
+            "/api": { target: "http://localhost:5080", changeOrigin: true }
+        }
+    }
 });
