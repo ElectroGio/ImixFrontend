@@ -6,7 +6,7 @@ name: imix-landing
 
 services:
   landing:
-    build:
+    build: .
     ports:
       - "${FRONTEND_HOST_PORT:-3005}:3000"
     image: imix-landing:latest
