@@ -17,31 +17,17 @@ services:
       # by its service name. If Dokploy renames it with a suffix, override
       # API_UPSTREAM in the panel (e.g. http://api-<suffix>:8080).
       API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
-    # No `ports:` mapping — Dokploy's Traefik reaches Nginx on port 80
-    # through the shared dokploy-network. Configure the domain in the
-    # Dokploy panel with Container Port = 80.
-    expose:
-      - "80"
+    ports:
+      - "${ADMIN_PORT:-8081}:80"
     networks:
       - dokploy-network
-    # Traefik routing (Dokploy's built-in Traefik reads these labels).
-    # Override the host by setting ADMIN_HOST in the Dokploy panel envs.
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=dokploy-network"
-      # HTTP router (port 80) → redirect to HTTPS
-      - "traefik.http.routers.imix-admin.rule=Host(`${ADMIN_HOST:-admin.imixnes.com}`)"
-      - "traefik.http.routers.imix-admin.entrypoints=web"
-      - "traefik.http.routers.imix-admin.middlewares=imix-admin-redirect"
-      - "traefik.http.middlewares.imix-admin-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.imix-admin-redirect.redirectscheme.permanent=true"
-      # HTTPS router (port 443) with Let's Encrypt
-      - "traefik.http.routers.imix-admin-secure.rule=Host(`${ADMIN_HOST:-admin.imixnes.com}`)"
-      - "traefik.http.routers.imix-admin-secure.entrypoints=websecure"
-      - "traefik.http.routers.imix-admin-secure.tls=true"
-      - "traefik.http.routers.imix-admin-secure.tls.certresolver=letsencrypt"
-      # Upstream service: nginx inside this container listens on 80
-      - "traefik.http.services.imix-admin.loadbalancer.server.port=80"
+    # Uncomment when using Dokploy's built-in Traefik:
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.imix-admin.rule=Host(`admin.example.com`)"
+    #   - "traefik.http.routers.imix-admin.entrypoints=websecure"
+    #   - "traefik.http.routers.imix-admin.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.imix-admin.loadbalancer.server.port=80"
 
 networks:
   dokploy-network:

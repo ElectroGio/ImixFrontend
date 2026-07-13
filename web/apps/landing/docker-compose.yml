@@ -16,31 +16,18 @@ services:
       # Inside dokploy-network the backend compose service `api` is reachable
       # by its service name. Override in Dokploy if the service was renamed.
       API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
-    # No `ports:` mapping — Dokploy's Traefik reaches Nginx on port 80
-    # through the shared dokploy-network. Configure the domain in the
-    # Dokploy panel with Container Port = 80.
-    expose:
-      - "80"
+    ports:
+      - "${LANDING_PORT:-8082}:80"
     networks:
       - dokploy-network
-    # Traefik routing (Dokploy's built-in Traefik reads these labels).
-    # Override the host by setting LANDING_HOST in the Dokploy panel envs.
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=dokploy-network"
-      # HTTP router (port 80) → redirect to HTTPS
-      - "traefik.http.routers.imix-landing.rule=Host(`${LANDING_HOST:-clients.imixnes.com}`)"
-      - "traefik.http.routers.imix-landing.entrypoints=web"
-      - "traefik.http.routers.imix-landing.middlewares=imix-landing-redirect"
-      - "traefik.http.middlewares.imix-landing-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.imix-landing-redirect.redirectscheme.permanent=true"
-      # HTTPS router (port 443) with Let's Encrypt
-      - "traefik.http.routers.imix-landing-secure.rule=Host(`${LANDING_HOST:-clients.imixnes.com}`)"
-      - "traefik.http.routers.imix-landing-secure.entrypoints=websecure"
-      - "traefik.http.routers.imix-landing-secure.tls=true"
-      - "traefik.http.routers.imix-landing-secure.tls.certresolver=letsencrypt"
-      # Upstream service: nginx inside this container listens on 80
-      - "traefik.http.services.imix-landing.loadbalancer.server.port=80"
+    # Uncomment when using Dokploy's built-in Traefik:
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.imix-landing.rule=Host(`www.example.com`)"
+    #   - "traefik.http.routers.imix-landing.entrypoints=websecure"
+    #   - "traefik.http.routers.imix-landing.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.imix-landing.loadbalancer.server.port=80"
+    #   - "traefik.http.services.imix-landing.loadbalancer.server.port=3000"
 
 networks:
   dokploy-network:
