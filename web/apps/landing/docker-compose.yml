@@ -17,7 +17,7 @@ services:
       # by its service name. Override in Dokploy if the service was renamed.
       API_UPSTREAM: ${API_UPSTREAM:-http://api:8080}
     ports:
-      - "${LANDING_PORT:-8082}:3000"
+      - "${LANDING_PORT:-8082}:80"
     networks:
       - dokploy-network
     # Uncomment when using Dokploy's built-in Traefik:
@@ -26,7 +26,7 @@ services:
     #   - "traefik.http.routers.imix-landing.rule=Host(`www.example.com`)"
     #   - "traefik.http.routers.imix-landing.entrypoints=websecure"
     #   - "traefik.http.routers.imix-landing.tls.certresolver=letsencrypt"
-    #   - "traefik.http.services.imix-landing.loadbalancer.server.port=3000"
+    #   - "traefik.http.services.imix-landing.loadbalancer.server.port=80"
 
 networks:
   dokploy-network:
