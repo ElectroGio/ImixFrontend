@@ -6,7 +6,9 @@ name: imix-landing
 
 services:
   landing:
-    build: .
+    build:
+      context: ../..                       # frontend/web (pnpm workspace root)
+      dockerfile: apps/landing/Dockerfile
     ports:
       - "${FRONTEND_HOST_PORT:-3005}:3000"
     image: imix-landing:latest
